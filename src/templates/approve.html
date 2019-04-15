@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h1>Approve photos</h1>
+
+
+    {% if photos %}
+        {% for photo in photos%}
+            <div class="photo_box">
+                <img src="{{photo['url']}}">
+                <form action="{{ url_for('approve') }}" id="form_approve{{photo['_id']['$oid']}}" method="POST">
+                    <input style="display:none;" name="id" value="{{photo['_id']['$oid']}}" >    
+                </form>
+                
+                <button type="submit" form="form_approve{{photo['_id']['$oid']}}" value="approve">Approve</button>
+            </div>
+            <hr>
+        {% endfor %}
+    
+    {% else %}
+        <p>No photos available yet.</p>
+    {% endif %}
+
+{% endblock %}

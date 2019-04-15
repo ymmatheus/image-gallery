@@ -1,0 +1,1 @@
+/usr/lib64/python3.6/encodings/cp1253.py

@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block body %}
+	<form method="post">
+		<p>Username: <input type=text name=username></p>
+		<p>Password: <input type=password name=password></p>
+		<p><input type=submit value=Login></p>
+	</form>
+	{% if error_msg %}
+		<p>{{error_msg}}</p>
+	{% endif %}
+{% endblock %}

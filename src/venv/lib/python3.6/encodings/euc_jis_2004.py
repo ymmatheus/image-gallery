@@ -1,0 +1,1 @@
+/usr/lib64/python3.6/encodings/euc_jis_2004.py

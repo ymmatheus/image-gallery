@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <h1>Welcome to the our Wedding Image Gallery</h1>
+
+    <select name="sort-option" form="sorting">
+      <option value="date-dec"> date high-low</option>
+      <option value="date-cre"> date low-high</option>
+      <option value="likes-dec"> likes high-low</option>
+      <option value="likes-cre"> likes low-high</option>
+    </select>
+    <form action="{{url_for('index')}}" id="sorting" method="POST">
+        <button type='submit' >Sort</button>
+    </form> 
+
+    {% if photos %}
+        {% for photo in photos %}
+            <div class="photo_box" >
+                <img src="{{photo['url']}}"><br>
+                {% if username %}
+
+                    <p>{{photo['likes']|length}} Likes </p>
+                    <form id="like_photo{{photo['_id']['$oid']}}" action="{{url_for('like')}}" method="POST" >
+                        <input style="display:none;" name="id" value="{{photo['_id']['$oid']}}" >
+                        {% if username in photo['likes'] %}
+                            <button name="like" form="like_photo{{photo['_id']['$oid']}}" value="dislike" type="submit" >dislike</button>
+                        {%else%}
+                            <button name="like" form="like_photo{{photo['_id']['$oid']}}" value="like" type="submit" >like</button>
+                        {%endif%}                        
+                    </form>
+
+                {% endif %}
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No photos available yet.</p>
+    {% endif %}
+
+{% endblock %}

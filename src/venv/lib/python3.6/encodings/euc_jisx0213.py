@@ -1,0 +1,1 @@
+/usr/lib64/python3.6/encodings/euc_jisx0213.py
