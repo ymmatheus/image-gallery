@@ -18,6 +18,12 @@ db = pymongo.database.Database(mongo, app.config["MONGO_DATABASE"])
 @app.route("/", methods=['GET', 'POST'])
 def index():
 	
+	'''
+		The index page is the image gallery itself
+		You can like pictures only if logged in
+		It shows the pictures for everybody 
+	'''
+
 	username = None
 	role = None
 
@@ -30,6 +36,7 @@ def index():
 	col_results = json.loads(dumps(col.find({'approved':True})))
 	sorted_col_results = col_results
 
+	# Sort the list of dictionaries
 	if sort == 'likes-dec':
 		sorted_col_results = sorted(col_results, key = lambda i: len(i['likes']), reverse=True )
 	elif sort == 'likes-cre':
@@ -50,6 +57,10 @@ def index():
 
 @app.route("/like", methods=['POST'])
 def like():
+
+	'''
+		Once a user clicks on like button this function will process it and redirect back to gallery page
+	'''
 
 	if 'username' not in session:
 		return redirect(url_for('index'))
@@ -76,7 +87,7 @@ def login():
 			col_results = json.loads(dumps(col.find({"name":request.form['username']})))
 			
 			if col_results and col_results[0]['password'] == request.form['password']:
-
+				# creates the session with username and role
 				session['username'] = request.form['username']
 				session['role'] = col_results[0]['role']
 
@@ -96,15 +107,21 @@ def logout():
 # for testing
 @app.route("/db")
 def database(): 
-	col = pymongo.collection.Collection(db, 'users')
-	col_results = json.loads(dumps(col.find()))
-	print(col_results)
+	# show all users on database
+	if 'username' in session and session['username'] == 'admin':
+		col = pymongo.collection.Collection(db, 'users')
+		col_results = json.loads(dumps(col.find()))
+		print(col_results)
 
-	return str(col_results)
-
+		return str(col_results)
+	return redirect(url_for('index'))
 
 @app.route("/submit_photo", methods=['GET','POST'])
 def submit_photo():
+
+	'''
+		All logged in users can upload their pictures.
+	'''
 
 	if 'username' in session:	
 		if request.method == 'POST':
@@ -118,6 +135,7 @@ def submit_photo():
 
 			if file and allowed_file(file.filename):
 				file.filename = secure_filename(file.filename)
+				# Calls function on helpers.py
 				output   	  = upload_file_to_s3(file, app.config["S3_BUCKET"])
 
 				col = pymongo.collection.Collection(db, 'photos')
@@ -133,14 +151,23 @@ def submit_photo():
 
 # for testing
 @app.route("/disapprove", methods=['GET','POST']) 
-def disapprove(): 
-	col = pymongo.collection.Collection(db, 'photos')
-	col.update_many({}, {'$set': {'approved':False}})
+def disapprove():
+	'''
+		disapprove all pictures
+	'''
+	if 'username' in session and session['username'] == 'admin':
+		col = pymongo.collection.Collection(db, 'photos')
+		col.update_many({}, {'$set': {'approved':False}})
 	return redirect(url_for('index'))
 
 
 @app.route("/approve", methods=['GET','POST'])
 def approve():
+
+	'''
+		Only users wife and husband can approve the pictures uploaded by any logged user
+		Theses users have the role wed
+	'''
 
 	if request.method == 'POST':
 		col = pymongo.collection.Collection(db, 'photos')

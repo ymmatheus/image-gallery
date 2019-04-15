@@ -3,30 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>Wedding Image Gallery</title>
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<style>
+		.sort-radio {float:left; margin-right:16px;}
+		.photo_box { margin-right: auto; margin-left: auto; float: right; clear:none;  }
+		
+	</style>
+
+    
 </head>
 <body>
 
 	<nav>
-		<a id="logo" href="{{ url_for('index') }}">WIG</a>
-		{% if username %}
-			<p>Hello, {{username}}</p>
-			<ul>
+		<div class="nav-wrapper">
+			
+			<ul  id="nav-mobile" class="left hide-on-med-and-down">
+
+			{% if username %}
 				{%if role=='wed'%}
-				<li><a href="{{ url_for('approve') }}">approve photos</a></li>
+					<li><a href="{{ url_for('approve') }}">approve photos</a></li>
 				{%endif%}
 				<li><a href="{{ url_for('submit_photo') }}">upload photo</a></li>
-				<li><a href="{{ url_for('logout') }}">logout</a></li>
+			{% endif %}
 			</ul>
-			
-			
-			
-		{% else %}
-			<a href="{{ url_for('login') }}">login</a>
-		{% endif %}
-	</nav>
-	
-	{% block body %}{% endblock %}
 
+
+			<a class="brand-logo center" id="logo" href="{{ url_for('index') }}">WIG</a>
+				
+			<ul  id="nav-mobile" class="right hide-on-med-and-down">
+				{% if username %}
+
+					<li>Hello, {{username}}</li>
+					<li><a href="{{ url_for('logout') }}">logout</a></li>
+
+				{% else %}
+					<li><a href="{{ url_for('login') }}">login</a></li>
+				{% endif %}
+
+			</ul>
+		</div>
+	</nav>
+	<div id="body" >
+		{% block body %}{% endblock %}
+	</div>
+	<!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+   	  document.addEventListener('DOMContentLoaded', function() {
+	    var elems = document.querySelectorAll('select');
+	    var instances = M.FormSelect.init(elems, options);
+	  });
+    </script>
 </body>
 
 </html>

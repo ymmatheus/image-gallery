@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-    <h1>Submit your picture</h1>
+<div id="submit_photo" style="width: 400px;text-align: center; margin-right: auto;margin-left: auto;">
+    <h4>Submit your picture</h4>
 
     <form action="{{ url_for('submit_photo') }}" method="POST" enctype="multipart/form-data">
 
-        <label for="user_file">Upload Your File</label>
-        <br></br>
-        <input type="file" name="user_file">
-        <br></br>
-        <button type="submit">Upload</button>
+        <label for="user_file">Upload Your photo:</label>
+		<div class="file-field input-field">
+	      <div class="btn">
+	        <span>File</span>
+	        <input type="file" name="user_file">
+	      </div>
+	      <div class="file-path-wrapper">
+	        <input class="file-path validate" type="text">
+	      </div>
+	    </div>
+
+        <button class="btn waves-effect waves-light" type="submit">Upload</button>
 
     </form>
     {% if msg %}
     	<p>{{msg}}</p>
     {% endif %}
+
+</div>
 {% endblock %}

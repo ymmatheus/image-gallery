@@ -1,41 +1,74 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<div id="photo_approve" style="width: 960px;text-align: center; margin-right: auto;margin-left: auto;">
+    <h2>Wedding Image Gallery</h2>
 
-    <h1>Welcome to the our Wedding Image Gallery</h1>
-
-    <select name="sort-option" form="sorting">
-      <option value="date-dec"> date high-low</option>
-      <option value="date-cre"> date low-high</option>
-      <option value="likes-dec"> likes high-low</option>
-      <option value="likes-cre"> likes low-high</option>
-    </select>
-    <form action="{{url_for('index')}}" id="sorting" method="POST">
-        <button type='submit' >Sort</button>
-    </form> 
+    <div>
+        <form action="{{url_for('index')}}" id="sorting" method="POST">
+        <p class="sort-radio">
+          <label>
+            <input value="date-dec" class="with-gap" name="sort-option" type="radio" checked />
+            <span>date high-low</span>
+          </label>
+        </p>
+        <p class="sort-radio">
+          <label>
+            <input value="date-cre" name="sort-option" type="radio" />
+            <span>date low-high</span>
+          </label>
+        </p>
+        <p class="sort-radio">
+          <label>
+            <input value="likes-dec" class="with-gap" name="sort-option" type="radio"  />
+            <span>likes high-low</span>
+          </label>
+        </p>
+        <p class="sort-radio">
+          <label>
+            <input  value="likes-cre" class="with-gap" name="sort-option" type="radio"/>
+            <span>likes low-high</span>
+          </label>
+        </p>
+            <button class="waves-effect waves-light btn" type='submit' >Sort</button>
+      </form>
+    </div>         
 
     {% if photos %}
         {% for photo in photos %}
             <div class="photo_box" >
-                <img src="{{photo['url']}}"><br>
-                {% if username %}
 
-                    <p>{{photo['likes']|length}} Likes </p>
-                    <form id="like_photo{{photo['_id']['$oid']}}" action="{{url_for('like')}}" method="POST" >
-                        <input style="display:none;" name="id" value="{{photo['_id']['$oid']}}" >
-                        {% if username in photo['likes'] %}
-                            <button name="like" form="like_photo{{photo['_id']['$oid']}}" value="dislike" type="submit" >dislike</button>
-                        {%else%}
-                            <button name="like" form="like_photo{{photo['_id']['$oid']}}" value="like" type="submit" >like</button>
-                        {%endif%}                        
-                    </form>
+                <div class="row">
+    <div class="col s9 m5">
+      <div class="card">
+        <div class="card-image">
+          <img src="{{photo['url']}}">
+          
+        </div>
+        <div class="card-content">
+            {% if username %}
+            <p>{{photo['likes']|length}} Likes </p>
+            <!--<p>Date added: {{photo['date_added']['$date']}}  </p>-->
+            <form id="like_photo{{photo['_id']['$oid']}}" action="{{url_for('like')}}" method="POST" >
+                <input style="display:none;" name="id" value="{{photo['_id']['$oid']}}" >
+                {% if username in photo['likes'] %}
+                    <button class="waves-effect waves-light btn"  name="like" form="like_photo{{photo['_id']['$oid']}}" value="dislike" type="submit" >dislike</button>
+                {%else%}
+                    <button class="waves-effect waves-light btn"  name="like" form="like_photo{{photo['_id']['$oid']}}" value="like" type="submit" >like</button>
+                {%endif%}                        
+            </form>
+            {% endif %}
+          
+        </div>
+        
+      </div>
+    </div>
+  </div>
+                
 
-                {% endif %}
-            </div>
-            <hr>
         {% endfor %}
     {% else %}
         <p>No photos available yet.</p>
     {% endif %}
-
+</h2>
 {% endblock %}

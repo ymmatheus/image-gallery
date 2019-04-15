@@ -11,6 +11,13 @@ def allowed_file(filename):
 
 def upload_file_to_s3(file, bucket_name):
 
+	'''
+		Uploads picture to S3 bucket. hashes the file and uses it as the name, 
+			avoiding multiple pictures hosted
+	
+		returns the url of hosted image to populate the database
+	'''
+
 	try:
 		
 		filename = str(hashlib.sha256(file.read()).hexdigest())+'.'+file.filename.split(".")[1] 

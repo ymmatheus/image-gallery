@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
-    <h1>Approve photos</h1>
+<div id="photo_approve" style="width: 400px;text-align: center; margin-right: auto;margin-left: auto;">
+    <h4>Approve photos</h4>
 
 
     {% if photos %}
@@ -13,7 +13,7 @@
                     <input style="display:none;" name="id" value="{{photo['_id']['$oid']}}" >    
                 </form>
                 
-                <button type="submit" form="form_approve{{photo['_id']['$oid']}}" value="approve">Approve</button>
+                <button class="btn waves-effect waves-light" type="submit" form="form_approve{{photo['_id']['$oid']}}" value="approve">Approve</button>
             </div>
             <hr>
         {% endfor %}
